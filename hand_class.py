@@ -49,16 +49,6 @@ class Hand:
                         str(id), (cx + 10, cy + 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
         return frame
-    """def find_position(self, frame, hand_no=0):
-        landmark_list = []
-        if self.results.multi_hand_landmarks:
-            if len(self.results.multi_hand_landmarks) > hand_no:
-                hand = self.results.multi_hand_landmarks[hand_no]
-                h, w, c = frame.shape
-                for id, lm in enumerate(hand.landmark):
-                    cx, cy = int(lm.x * w), int(lm.y * h)
-                    landmark_list.append([id, cx, cy])
-        return landmark_list"""
 
     def find_dist(self, frame, lm1:int, lm2:int, v ,changeVol=False):
         h, w, c = frame.shape
