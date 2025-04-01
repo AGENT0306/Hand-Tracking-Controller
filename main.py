@@ -1,7 +1,12 @@
 import cv2 as cv
-import os
-import mediapipe as mp
 import hand_class as hand
+from comtypes import CLSCTX_ALL
+from ctypes import cast, POINTER
+from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+devices = AudioUtilities.GetSpeakers()
+interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+volume = cast(interface, POINTER(IAudioEndpointVolume))
 
 hand_dect = hand.Hand()
 
@@ -28,7 +33,7 @@ while True:
     #shows each hand landmark coorinates
     #frame = hand_dect.show_loc(frame)
     #finds distance between thumb and pointer finger
-    frame = hand_dect.find_dist(frame, 4, 8)
+    frame = hand_dect.find_dist(frame, 4, 8, volume,True)
 
     cv.imshow("Video", frame)
 
