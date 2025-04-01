@@ -21,11 +21,16 @@ while True:
         print("Cannot read frame!!")
         break
 
-    rgb_frame = cv.cvtColor(frame, cv.COLOR_BGR2RGB)
+    hand_dect.find_hands(frame)
 
-    results = hand_dect.find_hands(rgb_frame)
+    #draws hand skeleton outline
+    frame = hand_dect.draw_skele(frame)
+    #shows each hand landmark coorinates
+    #frame = hand_dect.show_loc(frame)
+    #finds distance between thumb and pointer finger
+    frame = hand_dect.find_dist(frame, 4, 8)
 
-    cv.imshow("Video", results)
+    cv.imshow("Video", frame)
 
     if cv.waitKey(1) == 27:
         break
