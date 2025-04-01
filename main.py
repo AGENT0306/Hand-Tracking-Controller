@@ -26,16 +26,18 @@ while True:
         print("Cannot read frame!!")
         break
 
-    hand_dect.find_hands(frame)
+    hand_dect.set_frame(frame)
+
+    hand_dect.find_hands()
 
     #draws hand skeleton outline
-    frame = hand_dect.draw_skele(frame)
+    skele_frame = hand_dect.draw_skele()
     #shows each hand landmark coorinates
-    #frame = hand_dect.show_loc(frame)
+    loc_frame = hand_dect.show_loc()
     #finds distance between thumb and pointer finger
-    frame = hand_dect.find_dist(frame, 4, 8, volume,True)
+    dist_frame = hand_dect.find_dist(4, 8, volume,True)
 
-    cv.imshow("Video", frame)
+    cv.imshow("Video", dist_frame)
 
     if cv.waitKey(1) == 27:
         break
