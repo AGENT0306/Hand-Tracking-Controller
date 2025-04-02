@@ -12,9 +12,6 @@ hand_dect = hand.Hand()
 
 cap = cv.VideoCapture(0)
 
-cap.set(cv.CAP_PROP_FRAME_WIDTH, 1280)
-cap.set(cv.CAP_PROP_FRAME_HEIGHT, 720)
-
 if not cap.isOpened():
     print("ERROR!! Camera not opening!!")
     exit()
@@ -33,9 +30,13 @@ while True:
     #draws hand skeleton outline
     skele_frame = hand_dect.draw_skele()
     #shows each hand landmark coorinates
-    loc_frame = hand_dect.show_loc()
+    #loc_frame = hand_dect.show_loc()
     #finds distance between thumb and pointer finger
-    dist_frame = hand_dect.find_dist(4, 8, volume,True)
+    dist_frame = hand_dect.find_dist(4, 8, volume,False)
+
+    #dist_frame = hand_dect.find_dist(16, 20, volume, False)
+
+    dist_frame = hand_dect.which_hand()
 
     cv.imshow("Video", dist_frame)
 

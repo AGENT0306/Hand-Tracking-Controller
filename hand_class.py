@@ -34,12 +34,12 @@ class Hand:
 
                 for id, lm in enumerate(hand_landmarks.landmark):
                     h, w, c = self.frame.shape
-                    cx, cy, cz = int(lm.x * w), int(lm.y * h), int(lm.z)
+                    cx, cy, cz = int(lm.x * w), int(lm.y * h), round(lm.z, 4)
                     # Draw circle and text for each landmark
                     # cv2.circle(frame, (cx, cy), 3, (255, 0, 0), cv2.FILLED)
                     cv2.putText(self.frame,
                         str(cx - int(anchor_point.x * w)) + " " + str(int(anchor_point.y * h) - cy) + " " +
-                        str(id), (cx + 10, cy + 10),
+                        str(cz) + " " + str(id), (cx + 10, cy + 10),
                         cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
         return self.frame
 
@@ -64,3 +64,12 @@ class Hand:
 
     def set_frame(self, frame):
         self.frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+
+    def which_hand(self):
+        if self.results.multi_handedness:
+            for idx, handness in enumerate(self.results.multi_handedness):
+                x, y, c = self.frame.shape
+
+                cv2.putText(self.frame, str(handness.classification[0].label), ((x - 100) - (idx * 100), y - 200), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255), 2)
+
+        return cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
