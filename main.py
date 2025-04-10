@@ -32,7 +32,7 @@ while True:
     #shows each hand landmark coorinates
     #loc_frame = hand_dect.show_loc()
     #finds distance between thumb and pointer finger
-    dist_frame = hand_dect.find_dist(4, 8, volume,False)
+    dist_frame = hand_dect.find_dist(4, 8, volume,True)
 
     #dist_frame = hand_dect.find_dist(16, 20, volume, False)
 

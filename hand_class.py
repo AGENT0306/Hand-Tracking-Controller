@@ -15,10 +15,11 @@ class Hand:
 
     def find_hands(self):
         self.results = self.hands.process(self.frame)
+        self.mHLM = self.results.multi_hand_landmarks
 
     def draw_skele(self):
-        if self.results.multi_hand_landmarks:
-            for hand_landmarks in self.results.multi_hand_landmarks:
+        if self.mHLM:
+            for hand_landmarks in self.mHLM:
                 self.mp_draw.draw_landmarks(
                     self.frame,
                     hand_landmarks,
@@ -28,8 +29,8 @@ class Hand:
         return final
 
     def show_loc(self):
-        if self.results.multi_hand_landmarks:
-            for hand_landmarks in self.results.multi_hand_landmarks:
+        if self.mHLM:
+            for hand_landmarks in self.results.mHLM:
                 anchor_point = hand_landmarks.landmark[0]
 
                 for id, lm in enumerate(hand_landmarks.landmark):
@@ -45,20 +46,22 @@ class Hand:
 
     def find_dist(self, lm1:int, lm2:int, v ,changeVol=False):
         h, w, c = self.frame.shape
-        if self.results.multi_hand_landmarks:
-            for hand_landmarks in self.results.multi_hand_landmarks:
+        if self.mHLM:
+            for hand_landmarks in self.mHLM:
                 x1, y1 = int(hand_landmarks.landmark[lm1].x * w), int(hand_landmarks.landmark[lm1].y * h)
                 x2, y2 = int(hand_landmarks.landmark[lm2].x * w), int(hand_landmarks.landmark[lm2].y * h)
 
                 distance = np.hypot(x2-x1, y2 - y1)
 
                 cv2.line(self.frame, (x1,y1), (x2,y2), (0,255,0), 2)
+                cv2.putText(self.frame, str(distance), (50,50), cv2.FONT_HERSHEY_SIMPLEX, 0.5,(0,255,0), 1)
 
             if changeVol:
-                hand_landmark = self.results.multi_hand_landmarks[0]
+                hand_landmark = self.mHLM[0]
                 vol_range = v.GetVolumeRange()
                 min_vol, max_vol = vol_range[0], vol_range[1]
-                vol = np.interp(distance, [20, 400], [min_vol, max_vol])
+                vol = np.interp(distance, [20, 400], [-96, 0])
+                print(vol)
                 v.SetMasterVolumeLevel(vol, None)
         return cv2.cvtColor(self.frame, cv2.COLOR_RGB2BGR)
 
